@@ -1,0 +1,12 @@
+[package]
+name = "EasyMinecraft"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+actix-web = "4"
+jsonwebtoken = "8"
+serde = "1"
+rusqlite = { version = "0.25.3", features = ["winsqlite3"] }
+oso = "0.20.0"
+serde_json = "1.0.59"
