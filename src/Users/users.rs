@@ -22,6 +22,14 @@ struct LoginUser {
 async fn login(req_body: String) -> impl Responder {
 
     // testt();
+    if let Some(mutex) = TX.get()
+    {
+        if let Ok(tx) = mutex.lock()
+        {
+            let tx = tx.clone();
+            let _ = tx.send("kick hehehe3274 testkick \n".to_string());      //发送
+        }
+    }
 
 
     create_user_table();

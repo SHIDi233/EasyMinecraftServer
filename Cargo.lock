@@ -8,6 +8,7 @@ version = "0.1.0"
 dependencies = [
  "actix-web",
  "jsonwebtoken",
+ "once_cell",
  "oso",
  "rusqlite",
  "serde",
