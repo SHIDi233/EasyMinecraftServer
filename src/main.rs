@@ -1,4 +1,5 @@
 include!("Users/users.rs");
+include!("Minecraft/minecraft.rs");
 include!("Standard/mcapi.rs");
 use std::process::{Command, Stdio};
 use std::io::{self, Write};
@@ -13,66 +14,78 @@ use once_cell::sync::OnceCell;
 static TX: OnceCell<Mutex<Sender<String>>> = OnceCell::new();  
 static RX: OnceCell<Mutex<Receiver<String>>> = OnceCell::new();  
 
+#[derive(Serialize, Deserialize,Debug)]
+struct User {
+    username: String,
+    password: String,
+    code: i32,
+}
+
+#[derive(Serialize, Deserialize,Debug)]
+struct LoginUser {
+    username: String,
+    password: String,
+}
+
+#[derive(Serialize, Deserialize,Debug)]
+struct Cmd {
+    data: String,
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()>{
 
-    // let (tx, rx) = mpsc::channel::<>();     
+    println!("服务器初始化中...");
+    println!("开始自检流程---↓");
+
     let (tx, rx) = mpsc::channel();
 
     //初始化TX
     TX.get_or_init(||{
         Mutex::new(tx)   //tx所有权转移到全局变量TX
     });
-    // //初始化RX
-    // RX.get_or_init(||{
-    //     Mutex::new(rx)   //tx所有权转移到全局变量TX
-    // });
+    println!("|管道加载");
 
-    let handle1 = thread::spawn( move || {
+
+    let handle = thread::spawn( move || {
         fn m(rx:Receiver<String>) -> std::io::Result<()>{
-            // println!("{}",1);
-            // let mut shell = Command::new("F:\\bedrock-server-1.21.1.03\\bedrock_server.exe")  
-            //     .stdin(Stdio::piped()) // 标准输入被管道取代
-            //     .stdout(Stdio::piped()) // 标准输出被管道取代
-            //     .spawn()?;
-            // println!("{}",2);
-            // // let mut stdin = shell.stdin.take().expect("Failed to take stdin"); 
-            // let mut stdin = shell.stdin.as_mut();
-            // while(true){ 
-            //     if let Some(ref mut stdin) = stdin {
-            //         writeln!(stdin, "kick hehehe3274 testkick \n")?;
-            //         drop(stdin);
-            //     }
-            //     thread::sleep(Duration::from_secs(30));
-            //     println!("tick");
-            // }
-            
+            let mut shell = Command::new("F:\\bedrock-server-1.21.1.03\\bedrock_server.exe")  
+                .stdin(Stdio::piped()) // 标准输入被管道取代
+                .stdout(Stdio::piped()) // 标准输出被管道取代
+                .spawn()?;
+
+            let mut stdin = shell.stdin.as_mut();
+            let mut stdout = shell.stdout.as_mut();
+
+            println!("---服务器交互已启动---");
             while let Ok(method) = rx.recv(){
                 print!("rec:{}",method);
+                // println!("{:?}", method.type_id());
+                if let Some(ref mut stdin) = stdin {
+                    writeln!(stdin, "{}",method.as_str())?;
+                    drop(stdin);
+                    println!("Here is your result : {:?}", stdout);
+                }
                 println!("下一条--->");
             }
-
-
-           
             Ok(())
-        }
-
-        // while(true){
-        //     println!("rec:{}",rx.recv());
-        //     println!("下一条--->");
-        // }   
-        
-
-        println!("{}",0 );
-        m(rx);           
-        println!("{}",4 ); 
+        } 
+        m(rx);
     });
     
-
+    println!("|守护线程启动");
+    println!("自检结束---");
+    println!("---API服务已启动---");
     HttpServer::new( move || {
         App::new()
             .service(login)
             .service(register)
+            .service(kickoff)
+            .service(op)
+            .service(deop)
+            .service(add_user)
+            .service(del_user)
+            .service(notice)
         })
         .bind(("127.0.0.1", 8080))?
         .run()

@@ -2,36 +2,12 @@ include!("../Mapper/users.rs");
 include!("../Standard/http.rs");
 include!("../Standard/jwt.rs");
 
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, post, delete, web, App, HttpResponse, HttpServer, Responder};
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize,Debug)]
-struct User {
-    username: String,
-    password: String,
-    code: i32,
-}
-
-#[derive(Serialize, Deserialize,Debug)]
-struct LoginUser {
-    username: String,
-    password: String,
-}
 
 #[post("/users/login")]
 async fn login(req_body: String) -> impl Responder {
-
-    // testt();
-    if let Some(mutex) = TX.get()
-    {
-        if let Ok(tx) = mutex.lock()
-        {
-            let tx = tx.clone();
-            let _ = tx.send("kick hehehe3274 testkick \n".to_string());      //发送
-        }
-    }
-
-
     create_user_table();
     let str_ref: &str = req_body.as_str();
     let json: LoginUser = serde_json::from_str(str_ref).unwrap();
@@ -43,7 +19,6 @@ async fn login(req_body: String) -> impl Responder {
     }
     if(user_waitting_login.password==json.password.clone()){
         println!("密码正确");
-
         //jwt下发
         let token:String;
         match create_token(json.username.clone()){
