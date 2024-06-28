@@ -21,7 +21,7 @@ async fn login(req_body: String) -> impl Responder {
         println!("密码正确");
         //jwt下发
         let token:String;
-        match create_token(json.username.clone()){
+        match create_token(json.username.clone(),user_waitting_login.role.clone()){
             Ok(_v)=>token=_v,
             Err(_e)=>{println!("err:{}",_e);return HttpResponse::Ok().body(error("token分发错误，请联系系统管理员！"));},
         }
@@ -39,7 +39,7 @@ async fn register(req_body: String) -> impl Responder {
     create_user_table();
     println!("{}",req_body);
     let str_ref: &str = req_body.as_str();
-    let json: User = serde_json::from_str(str_ref).unwrap();
+    let json: _User = serde_json::from_str(str_ref).unwrap();
 
     println!("deserialized = {:?}", json);
 

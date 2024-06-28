@@ -5,6 +5,17 @@ async fn kickoff(req_body: String) -> impl Responder {
     let json: Cmd = serde_json::from_str(str_ref).unwrap();
 
     //通行请求
+    let role: String;
+    match analysis_token_role(json.token.clone()){
+        Ok(_v)=>role=_v,
+        Err(_e)=>{println!("err:{}",_e);return HttpResponse::Ok().body(error("token错误！"));},
+    }
+    if(role=="owner" || role=="administrator"){
+
+    }
+    else{
+        return HttpResponse::Ok().body(error("权限错误!"));
+    }
 
     if let Some(mutex) = TX.get(){
         if let Ok(tx) = mutex.lock()
@@ -24,6 +35,17 @@ async fn op(req_body: String) -> impl Responder {
     let json: Cmd = serde_json::from_str(str_ref).unwrap();
 
     //通行请求
+    let role: String;
+    match analysis_token_role(json.token.clone()){
+        Ok(_v)=>role=_v,
+        Err(_e)=>{println!("err:{}",_e);return HttpResponse::Ok().body(error("token错误！"));},
+    }
+    if(role=="owner" || role=="administrator"){
+
+    }
+    else{
+        return HttpResponse::Ok().body(error("权限错误!"));
+    }
 
     if let Some(mutex) = TX.get(){
         if let Ok(tx) = mutex.lock()
@@ -43,6 +65,17 @@ async fn deop(req_body: String) -> impl Responder {
     let json: Cmd = serde_json::from_str(str_ref).unwrap();
 
     //通行请求
+    let role: String;
+    match analysis_token_role(json.token.clone()){
+        Ok(_v)=>role=_v,
+        Err(_e)=>{println!("err:{}",_e);return HttpResponse::Ok().body(error("token错误！"));},
+    }
+    if(role=="owner" || role=="administrator"){
+
+    }
+    else{
+        return HttpResponse::Ok().body(error("权限错误!"));
+    }
 
     if let Some(mutex) = TX.get(){
         if let Ok(tx) = mutex.lock()
@@ -62,6 +95,17 @@ async fn add_user(req_body: String) -> impl Responder {
     let json: Cmd = serde_json::from_str(str_ref).unwrap();
 
     //通行请求
+    let role: String;
+    match analysis_token_role(json.token.clone()){
+        Ok(_v)=>role=_v,
+        Err(_e)=>{println!("err:{}",_e);return HttpResponse::Ok().body(error("token错误！"));},
+    }
+    if(role=="owner" || role=="administrator"){
+
+    }
+    else{
+        return HttpResponse::Ok().body(error("权限错误!"));
+    }
 
     if let Some(mutex) = TX.get(){
         if let Ok(tx) = mutex.lock()
@@ -81,7 +125,17 @@ async fn del_user(req_body: String) -> impl Responder {
     let json: Cmd = serde_json::from_str(str_ref).unwrap();
 
     //通行请求
+    let role: String;
+    match analysis_token_role(json.token.clone()){
+        Ok(_v)=>role=_v,
+        Err(_e)=>{println!("err:{}",_e);return HttpResponse::Ok().body(error("token错误！"));},
+    }
+    if(role=="owner" || role=="administrator"){
 
+    }
+    else{
+        return HttpResponse::Ok().body(error("权限错误!"));
+    }
     if let Some(mutex) = TX.get(){
         if let Ok(tx) = mutex.lock()
         {
@@ -100,6 +154,18 @@ async fn notice(req_body: String) -> impl Responder {
     let json: Cmd = serde_json::from_str(str_ref).unwrap();
 
     //通行请求
+    let role: String;
+    match analysis_token_role(json.token.clone()){
+        Ok(_v)=>role=_v,
+        Err(_e)=>{println!("err:{}",_e);return HttpResponse::Ok().body(error("token错误！"));},
+    }
+    println!("{}",role);
+    if(role=="owner" || role=="administrator"){
+
+    }
+    else{
+        return HttpResponse::Ok().body(error("权限错误!"));
+    }
 
     if let Some(mutex) = TX.get(){
         if let Ok(tx) = mutex.lock()

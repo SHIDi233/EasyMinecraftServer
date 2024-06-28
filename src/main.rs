@@ -19,6 +19,14 @@ struct User {
     username: String,
     password: String,
     code: i32,
+    role:String,
+}
+
+#[derive(Serialize, Deserialize,Debug)]
+struct _User {
+    username: String,
+    password: String,
+    code: i32,
 }
 
 #[derive(Serialize, Deserialize,Debug)]
@@ -30,6 +38,7 @@ struct LoginUser {
 #[derive(Serialize, Deserialize,Debug)]
 struct Cmd {
     data: String,
+    token: String,
 }
 
 #[actix_web::main]
@@ -86,8 +95,8 @@ async fn main() -> std::io::Result<()>{
             .service(add_user)
             .service(del_user)
             .service(notice)
-        })
-        .bind(("127.0.0.1", 8080))?
-        .run()
-        .await
+    })
+    .bind(("127.0.0.1", 8080))?
+    .run()
+    .await
 }

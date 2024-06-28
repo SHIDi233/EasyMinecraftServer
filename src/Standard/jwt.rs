@@ -4,40 +4,50 @@ use jsonwebtoken::{encode, decode, EncodingKey, DecodingKey, Validation, Header}
 #[derive(Debug, Serialize, Deserialize)]
 struct Claims {
     username: String,
+    role:String,
     exp: usize,
 }
  
-fn test() -> Result<(), jsonwebtoken::errors::Error> {
-    let secret_key = b"secret"; // 密钥，应当保密
-    let token_claimes = Claims {
-        username: "username".to_owned(),   
-        exp:10000000000000000.to_owned(),
-    };
+// fn test() -> Result<(), jsonwebtoken::errors::Error> {
+//     let secret_key = b"secret"; // 密钥，应当保密
+//     let token_claimes = Claims {
+//         username: "username".to_owned(),   
+//         exp:10000000000000000.to_owned(),
+//         role:auth.to_owned(),
+//     };
  
-    // 创建JWT
-    let token = encode(&Header::default(), &token_claimes, &EncodingKey::from_secret("secret".as_ref()))?;
-    println!("JWT: {}", token);
+//     // 创建JWT
+//     let token = encode(&Header::default(), &token_claimes, &EncodingKey::from_secret("secret".as_ref()))?;
+//     println!("JWT: {}", token);
     
-    // 解码JWT
-    let decoded_token = decode::<Claims>(&token, &DecodingKey::from_secret("secret".as_ref()), &Validation::default())?;
-    println!("Decoded token: {:?}", decoded_token.claims);
+//     // 解码JWT
+//     let decoded_token = decode::<Claims>(&token, &DecodingKey::from_secret("secret".as_ref()), &Validation::default())?;
+//     println!("Decoded token: {:?}", decoded_token.claims);
  
-    Ok(())
-}
+//     Ok(())
+// }
 
-fn create_token(username:String) -> Result<String, jsonwebtoken::errors::Error>{
-    let secret_key = b"secret"; // 密钥，应当保密
+fn create_token(username:String,auth:String) -> Result<String, jsonwebtoken::errors::Error>{
+    let secret_key = b"secret"; // 密钥，应当保密   
     let token_claimes = Claims {
         username: username.to_owned(),   
         exp:10000000000000000.to_owned(),
+        role:auth.to_owned(),
     };
     let token = encode(&Header::default(), &token_claimes, &EncodingKey::from_secret("secret".as_ref()))?;
     return Ok(token);
 }
 
-fn analysis_token(token:String) -> Result<String, jsonwebtoken::errors::Error>{
+fn analysis_token_username(token:String) -> Result<String, jsonwebtoken::errors::Error>{
     // 解码JWT
     let decoded_token = decode::<Claims>(&token, &DecodingKey::from_secret("secret".as_ref()), &Validation::default())?;
     println!("Decoded token: {:?}", decoded_token.claims);  
     return Ok(decoded_token.claims.username);            
+}
+
+fn analysis_token_role(token:String) -> Result<String, jsonwebtoken::errors::Error>{
+    // 解码JWT
+    let decoded_token = decode::<Claims>(&token, &DecodingKey::from_secret("secret".as_ref()), &Validation::default())?;
+    println!("Decoded token: {:?}", decoded_token.claims);  
+    return Ok(decoded_token.claims.role);            
 }

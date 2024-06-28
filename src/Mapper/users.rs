@@ -9,7 +9,8 @@ fn create_user_table() -> Result<()> {
         "CREATE TABLE if not exists users (
             username TEXT NOT NULL PRIMARY KEY,
             password TEXT NOT NULL,
-            code INTEGER
+            code INTEGER,
+            role TEXT NOT NULL
         )",
         params![],
     )?;
@@ -20,7 +21,7 @@ fn create_user_table() -> Result<()> {
 fn create_user(username:String, password:String, code:i32) -> Result<(),Error> {
     let res:Result<(),Error>;
     let conn = Connection::open("easymc.db")?;
-    let sql = "INSERT INTO users (username,password,code) VALUES (?1, ?2, ?3)";
+    let sql = "INSERT INTO users (username,password,code,role) VALUES (?1, ?2, ?3, 'user')";
     let mut stmt = conn.prepare(sql)?;
     match stmt.execute(params![username, password, code]){
         Ok(_) => res=Ok(()),
@@ -51,12 +52,13 @@ fn create_user(username:String, password:String, code:i32) -> Result<(),Error> {
 fn select_user_by_username(username:String) -> Result<User,Error> {
     let res:Result<User,Error>;
     let conn = Connection::open("easymc.db")?;
-    let mut stmt = conn.prepare("SELECT username,password,code FROM users WHERE username = ?")?;
+    let mut stmt = conn.prepare("SELECT username,password,code,role FROM users WHERE username = ?")?;
     let person_iter = stmt.query_map(params![username], |row| {
         Ok(User{
             username: row.get(0)?,
             password: row.get(1)?,
             code: row.get(2)?,
+            role: row.get(3)?,
         })
     })?;
     let (min_len, max_len) = person_iter.size_hint();
@@ -71,6 +73,7 @@ fn select_user_by_username(username:String) -> Result<User,Error> {
             username: "null".to_string(),
             password: "null".to_string(),
             code: 0 ,
+            role: "vistor".to_string()
         });
         return res; 
     }
@@ -79,6 +82,7 @@ fn select_user_by_username(username:String) -> Result<User,Error> {
             username: "null".to_string(),
             password: "null".to_string(),
             code: 0 ,
+            role: "vistor".to_string()
         });
         return res;
     }
