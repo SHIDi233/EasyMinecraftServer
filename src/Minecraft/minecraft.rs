@@ -157,7 +157,7 @@ async fn notice(req_body: String) -> impl Responder {
     let role: String;
     match analysis_token_role(json.token.clone()){
         Ok(_v)=>role=_v,
-        Err(_e)=>{println!("err:{}",_e);return HttpResponse::Ok().body(error("token错误！"));},
+        Err(_e)=>{println!("err:{}",_e);return HttpResponse::Ok().body(error("token错误！"));},     
     }
     println!("{}",role);
     if(role=="owner" || role=="administrator"){
