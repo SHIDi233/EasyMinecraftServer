@@ -171,7 +171,38 @@ async fn notice(req_body: String) -> impl Responder {
         if let Ok(tx) = mutex.lock()
         {
             let tx = tx.clone();
-            let _ = tx.send("say ".to_string()+&json.data+" \n");
+            let _ = tx.send("say ".to_string()+&json.data);
+            println!("服务器发布广播信息：{}",json.data);
+        }
+    }
+    return HttpResponse::Ok().body(success("success"));
+}   
+
+#[put("/api/stop")]
+async fn stop(req_body: String) -> impl Responder {
+        
+    let str_ref: &str = req_body.as_str();
+    let json: Cmd = serde_json::from_str(str_ref).unwrap();
+
+    //通行请求
+    let role: String;
+    match analysis_token_role(json.token.clone()){
+        Ok(_v)=>role=_v,
+        Err(_e)=>{println!("err:{}",_e);return HttpResponse::Ok().body(error("token错误！"));},     
+    }
+    println!("{}",role);
+    if(role=="owner" || role=="administrator"){
+
+    }
+    else{
+        return HttpResponse::Ok().body(error("权限错误!"));
+    }
+
+    if let Some(mutex) = TX.get(){
+        if let Ok(tx) = mutex.lock()
+        {
+            let tx = tx.clone();
+            let _ = tx.send("stop".to_string());
             println!("服务器发布广播信息：{}",json.data);
         }
     }

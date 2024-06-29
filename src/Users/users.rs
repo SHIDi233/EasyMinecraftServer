@@ -2,7 +2,7 @@ include!("../Mapper/users.rs");
 include!("../Standard/http.rs");
 include!("../Standard/jwt.rs");
 
-use actix_web::{get, post, delete, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, post, delete, put, web, App, HttpResponse, HttpServer, Responder};
 use serde::{Serialize, Deserialize};
 
 
