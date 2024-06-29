@@ -2,14 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import Base from '../views/Base.vue'
 import Home from '../components/Home.vue'
-import Ware from '../components/Ware.vue'
-import Area from '../components/Area.vue'
-import Self from '../components/Self.vue'
-import Cargo from '../components/Cargo.vue'
-import Goods from '../components/Goods.vue'
-import Stock from '../components/Stock.vue'
-import WorkList from '../components/WorkList.vue'
-import AnimePage from '../components/AnimePage.vue'
+import User from '../components/User.vue'
+import Notice from '../components/Notice.vue'
+import Safe from '../components/Safe.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,44 +25,19 @@ const router = createRouter({
           component: Home
         },
         {
-          path: '/ware',
-          name: '/ware',
-          component: Ware
+          path: '/users',
+          name: '/users',
+          component: User
         },
         {
-          path: '/area',
-          name: '/area',
-          component: Area
+          path: '/notice',
+          name: '/notice',
+          component: Notice
         },
         {
-          path: '/self',
-          name: '/self',
-          component: Self
-        },
-        {
-          path: '/cargo',
-          name: '/cargo',
-          component: Cargo
-        },
-        {
-          path: '/goods',
-          name: '/goods',
-          component: Goods
-        },
-        {
-          path: '/stock',
-          name: '/stock',
-          component: Stock
-        },
-        {
-          path: '/worklist',
-          name: '/worklist',
-          component: WorkList
-        },
-        {
-          path: '/animePage',
-          name: '/animePage',
-          component: AnimePage
+          path: '/safe',
+          name: '/safe',
+          component: Safe
         },
       ]
     },
@@ -76,10 +46,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.path === '/login') return next();
-  const tokenStr = window.localStorage.getItem('optoken');
+  const tokenStr = window.localStorage.getItem('easy_mc_token');
   if (!tokenStr) return next('/login');
   next();
 })
-
 
 export default router

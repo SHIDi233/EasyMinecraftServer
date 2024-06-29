@@ -103,8 +103,13 @@
         height: 100%;
         object-fit: fill;
     }
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+    }
     .main-box{
-        position:absolute;
+        position:fixed;
         left:50%;
         top:50%;
         transform:translate(-50%,-50%);
@@ -113,11 +118,10 @@
         min-width: 400px;
         min-height: 200px;
         max-height: 500px;
-        box-shadow: 10px 10px 10px #d1d9e6, -10px -10px 10px #f9f9f9;
+        /* box-shadow: 10px 10px 10px #d1d9e6, -10px -10px 10px #f9f9f9; */
         border-radius: 12px;
         padding: 30px;
         opacity: 0.95;
-        background-color:white
     }
     .container {
         justify-content: center;
@@ -164,7 +168,7 @@
         transition: 1.25s;
         background-color: #ecf0f3;
         overflow: hidden;
-        box-shadow: 4px 4px 10px #d1d9e6, -4px -4px 10px #f9f9f9;
+        /* box-shadow: 4px 4px 10px #d1d9e6, -4px -4px 10px #f9f9f9; */
         border-radius: 12px;
         .switch__circle__bottom {
             position: absolute;
@@ -225,7 +229,7 @@
 
 <template>
     <div class="body">
-        <div class="img1">
+        <!-- <div class="img1">
             <img src="https://dbd-video-0.oss-cn-beijing.aliyuncs.com/img/%7BE7565D31-2FA8-4d8f-A5F4-0A22E195A04B%7D.png" alt="">
         </div>
         <div class="img2">
@@ -233,6 +237,9 @@
         </div>
         <div class="img3">
             <img src="https://dbd-video-0.oss-cn-beijing.aliyuncs.com/img/%7BBF6E6DB5-ED60-4269-8CB5-838EA31D55D8%7D.png" alt="">
+        </div> -->
+        <div class="img">
+            <img src="http://127.0.0.1:8080/res/3.jpg" alt="">
         </div>
         <div class="main-box">
             <div :class="['container', 'container-register', { 'is-login': isLogin }]">
@@ -243,18 +250,18 @@
                     style="max-width: 600px"
                     :rules="rules"
                 >
-                    <el-form-item label="Name" prop="name">
+                    <el-form-item label="minecraft用户名" prop="name">
                         <el-input v-model="registerForm.name" />
                     </el-form-item>
-                    <el-form-item label="Password" prop="password">
+                    <el-form-item label="新密码" prop="password">
                         <el-input v-model="registerForm.password" type="password" />
                     </el-form-item>
-                    <el-form-item label="Code" prop="number">
+                    <el-form-item label="邀请码" prop="number">
                         <el-input v-model="registerForm.code" />
                     </el-form-item>
                 </el-form>
                 <div class="bottom">
-                    <el-button type="primary" @click="Register(formRef)">Submit</el-button>
+                    <el-button type="primary" @click="Register(formRef)">注册</el-button>
                 </div>
             </div>
             <div :class="['container', 'container-login', { 'is-login is-register': isLogin }]">
@@ -264,15 +271,15 @@
                     style="max-width: 600px"
                     :rules="rules"
                 >
-                    <el-form-item label="Name" prop="name">
+                    <el-form-item label="minecraft用户名" prop="name">
                         <el-input v-model="loginForm.name" />
                     </el-form-item>
-                    <el-form-item label="Password" prop="password">
+                    <el-form-item label="密码" prop="password">
                         <el-input v-model="loginForm.password" type="password"/>
                     </el-form-item>
                 </el-form>
                 <div class="bottom">
-                    <el-button type="primary" @click="Login(formRef)">Submit</el-button>
+                    <el-button type="primary" @click="Login(formRef)">登录</el-button>
                 </div>
             </div>
             <div :class="['switch', { login: isLogin }]">

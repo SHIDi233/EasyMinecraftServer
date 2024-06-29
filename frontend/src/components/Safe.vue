@@ -6,49 +6,7 @@
 
 <template>
     <el-card style="width: 100%">
-        <div>
-            <el-button type="danger" style="float:right;margin-right: 1%;" size="small" @click="">删除仓库</el-button>
-            <el-button type="success" style="float:right;margin-right: 1%;" size="small" @click="dialogFormVisible=true;">添加仓库</el-button>
-        </div>
-        <div class="d">
-            <el-table
-                :data="tableData"
-                style="width: 100%;"
-                border
-                v-loading="loading"
-            >
-                <el-table-column type="selection" width="38px"/>
-                <el-table-column property="name" label="仓库名称" />
-                <el-table-column property="phoneNumber" label="联系方式"/>
-                <el-table-column property="description" label="简介" />
-                <el-table-column property="address" label="地址"  />
-                <el-table-column fixed="right" width="80">
-                    <template #default="scope">
-                        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-
-            <el-dialog v-model="dialogFormVisible" title="新建仓库" width="500">
-                <el-form :model="form" ref="ruleFormRef" label-width="auto" :rules="rules" style="max-width: 600px">
-                    <el-form-item label="仓库名称:" prop="name">
-                        <el-input v-model="form.name" />
-                    </el-form-item>
-                    <el-form-item label="联系电话:" prop="phoneNumber">
-                        <el-input v-model="form.phoneNumber" />
-                    </el-form-item>
-                    <el-form-item label="仓库地址:" prop="address">
-                        <el-input v-model="form.address" />
-                    </el-form-item>
-                    <el-form-item label="仓库介绍:" prop="description">
-                        <el-input v-model="form.description" />
-                    </el-form-item>
-                </el-form>
-                <div style="display: flex;justify-content: center;align-items: center;">
-                    <el-button type="primary" v-loading="loading_2" style="" @click="commit(ruleFormRef)">创建仓库</el-button>
-                </div>
-            </el-dialog>
-        </div>
+        111
     </el-card>
 </template>
 

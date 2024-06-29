@@ -149,13 +149,12 @@ async fn del_user(req_body: String) -> impl Responder {
 
 #[post("/api/notice")]
 async fn notice(req_body: String) -> impl Responder {
-        
     let str_ref: &str = req_body.as_str();
     let json: Cmd = serde_json::from_str(str_ref).unwrap();
 
     //通行请求
     let role: String;
-    match analysis_token_role(json.token.clone()){
+    match analysis_token_role(json.token.clone()){  
         Ok(_v)=>role=_v,
         Err(_e)=>{println!("err:{}",_e);return HttpResponse::Ok().body(error("token错误！"));},     
     }

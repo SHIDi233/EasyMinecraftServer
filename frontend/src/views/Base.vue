@@ -98,7 +98,6 @@
                             </span>
                             <template #dropdown>
                                 <el-dropdown-menu>
-                                    <el-dropdown-item command="self">个人中心</el-dropdown-item>
                                     <el-dropdown-item>修改密码</el-dropdown-item>
                                     <el-dropdown-item command="home" @click="exit" >退出登录</el-dropdown-item>
                                 </el-dropdown-menu>
@@ -116,7 +115,7 @@
                         class="el-menu-vertical-demo"
                         active-text-color="#ffd04b"
                         background-color="#545c64"
-                        text-color="#fff"
+                        text-color="#fff"   
                         @select="changeTab"
                         style="height:100%"
                     >
@@ -124,36 +123,20 @@
                             <el-icon><HomeFilled /></el-icon>
                             <span>{{ table['home'] }}</span>
                         </el-menu-item>
-                        <el-sub-menu index="仓库库区">
+                        <el-sub-menu index="服务器">
                             <template #title>
                                 <el-icon><Menu /></el-icon>
-                                <span>仓库库区</span>
+                                <span>服务器</span>
                             </template>
-                            <el-menu-item index="ware">{{ table['ware'] }}</el-menu-item>
-                            <el-menu-item index="area">{{ table['area'] }}</el-menu-item>
-                            <el-menu-item index="stock">{{ table['stock'] }}</el-menu-item>
-                            <el-menu-item index="animePage">{{ table['animePage'] }}</el-menu-item>
-                        </el-sub-menu>
-                        <el-sub-menu index="物料管理">
-                            <template #title>
-                                <el-icon><Menu /></el-icon>
-                                <span>物料管理</span>
-                            </template>
-                            <el-menu-item index="cargo">{{ table['cargo'] }}</el-menu-item>
-                            <el-menu-item index="goods">{{ table['goods'] }}</el-menu-item>
-                        </el-sub-menu>
-                        <el-sub-menu index="我的工作">
-                            <template #title>
-                                <el-icon><Menu /></el-icon>
-                                <span>我的工作</span>
-                            </template>
-                            <el-menu-item index="worklist">{{ table['worklist'] }}</el-menu-item>
+                            <el-menu-item index="users">{{ table['users'] }}</el-menu-item>
+                            <el-menu-item index="notice">{{ table['notice'] }}</el-menu-item>
+                            <el-menu-item index="safe">{{ table['safe'] }}</el-menu-item>
                         </el-sub-menu>
                     </el-menu>
                 </el-aside>
                 <el-container style="height: 100%;">
                     <el-main style="height: 100%;">
-                        <el-tabs
+                        <!-- <el-tabs
                             type="border-card"
                             v-model="editableTabsValue"
                             class="demo-tabs"
@@ -170,7 +153,8 @@
                             >
                                 <router-view style="height: 100%;"></router-view>
                             </el-tab-pane>
-                        </el-tabs>
+                        </el-tabs> -->
+                        <router-view style="height: 100%;"></router-view>
                     </el-main>
                     <el-footer>Footer</el-footer>
                 </el-container>
@@ -203,7 +187,7 @@
     ]);
 
     const exit=()=>{
-        localStorage.removeItem('optoken');
+        localStorage.removeItem('easy_mc_token');
         location.reload();
     };
 
@@ -233,20 +217,26 @@
         {
             home:'首页',
 
-            self:'个人中心',
+            users:'用户列表',
 
-            ware:'仓库',
-            area:'库区',
+            notice:'信息发布',
 
-            cargo:'分类',
+            safe:'安全',
 
-            goods:'商品',
+            // self:'个人中心',
 
-            stock:'出/入库',
+            // ware:'仓库',
+            // area:'库区',
 
-            worklist:'任务清单(BETA)',
+            // cargo:'分类',
 
-            animePage:'仓库监控',
+            // goods:'商品',
+
+            // stock:'出/入库',
+
+            // worklist:'任务清单(BETA)',
+
+            // animePage:'仓库监控',
         },
     )
 

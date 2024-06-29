@@ -13,10 +13,12 @@ use std::sync::Mutex;
 use once_cell::sync::OnceCell;
 use std::io::Read;
 
+use actix_files as fs;
+
 static TX: OnceCell<Mutex<Sender<String>>> = OnceCell::new();  
 static RX: OnceCell<Mutex<Receiver<String>>> = OnceCell::new();  
 
-#[derive(Serialize, Deserialize,Debug)]
+#[derive(Serialize, Deserialize,Debug,Clone)]
 struct User {
     username: String,
     password: String,
@@ -142,8 +144,10 @@ async fn main() -> std::io::Result<()>{
             .service(del_user)
             .service(notice)
             .service(stop)
+            .service(list)
+            .service(fs::Files::new("/res", "./static").show_files_listing())
     })
     .bind(("127.0.0.1", 8080))?
-    .run()
+    .run()  
     .await
 }

@@ -2,7 +2,7 @@ include!("../Mapper/users.rs");
 include!("../Standard/http.rs");
 include!("../Standard/jwt.rs");
 
-use actix_web::{get, post, delete, put, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, post, delete, put,  web, App, HttpResponse, HttpServer, Responder};
 use serde::{Serialize, Deserialize};
 
 
@@ -14,7 +14,7 @@ async fn login(req_body: String) -> impl Responder {
 
     let user_waitting_login: User;
     match select_user_by_username(json.username.clone()){
-        Ok(_v)=>user_waitting_login=_v,
+        Ok(_v)=>user_waitting_login=_v, 
         Err(_e)=>{println!("err:{}",_e);return HttpResponse::Ok().body(error("用户名错误或不存在！"));},
     }
     if(user_waitting_login.password==json.password.clone()){
@@ -46,8 +46,38 @@ async fn register(req_body: String) -> impl Responder {
     //code验证
 
     //创建用户
-    match create_user(json.username,json.password,json.code){
-        Ok(_) => return HttpResponse::Ok().body(success("用户创建成功！")),
+    match create_user(json.username.clone(),json.password,json.code){
+        Ok(_) =>  { 
+            //mc白名单添加
+            if let Some(mutex) = TX.get(){
+                if let Ok(tx) = mutex.lock()
+                {
+                    let tx = tx.clone();
+                    let _ = tx.send("allowlist add ".to_string()+&json.username+" \n");
+                    println!("服务器添加用户：{}",json.username);
+                }
+            }
+            return HttpResponse::Ok().body(success("用户创建成功！"));
+        },
+        Err(e) => {
+                    println!("err:{}",e);
+                    return HttpResponse::Ok().body(error("用户名重复，请更换。"));
+                }
+    }
+    //code关闭  
+
+    
+
+    HttpResponse::Ok().body(req_body) ;
+}
+
+#[get("/users")]
+async fn list(req_body: String) -> impl Responder {
+    //code验证
+
+    //创建用户
+    match select_users(){
+        Ok(temp) => return HttpResponse::Ok().body(success_json(&temp.to_string())),
         Err(e) => {
                     println!("err:{}",e);
                     return HttpResponse::Ok().body(error("用户名重复，请更换。"));
